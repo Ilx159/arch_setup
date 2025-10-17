@@ -32,10 +32,11 @@ static const Rule rules[] = {
 };
 
 /* Layout(s) */
-static const float mfact     = 0.55; /* factor of master area size [0.05..0.95] */
-static const int nmaster     = 1;    /* number of clients in master area */
-static const int resizehints = 1;    /* 1 means respect size hints in tiled resizals */
-static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
+static const float mfact        = 0.55; /* factor of master area size [0.05..0.95] */
+static const int nmaster        = 1;    /* number of clients in master area */
+static const int resizehints    = 1;    /* 1 means respect size hints in tiled resizals */
+static const int lockfullscreen = 1;    /* 1 will force focus on the fullscreen window */
+static const int refreshrate    = 60;  /* refresh rate (per second) for client move/resize */
 
 static const Layout layouts[] = {
 	/* symbol     arrange function */
@@ -56,10 +57,11 @@ static const Layout layouts[] = {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 /* Commands */
+static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
+static const char *dmenucmd[]       = { "rofi", "-show", "drun", NULL };
 static const char *termcmd[]        = { "kitty", NULL };
 static const char *browsercmd[]     = { "firefox", NULL };
 static const char *filemgrcmd[]     = { "nemo", NULL };
-static const char *dmenucmd[]       = { "rofi", "-show", "drun", NULL };
 static const char *lockcmd[]        = { "slick", NULL };
 static const char *volupcmd[]       = { "pamixer", "-i", "5", NULL };
 static const char *voldowncmd[]     = { "pamixer", "-d", "5", NULL };
@@ -80,13 +82,17 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_r,      spawn,          {.v = dmenucmd } },
 	{ MODKEY,                       XK_n,      spawn,          {.v = browsercmd } },
 	{ MODKEY,                       XK_f,      setlayout,      {.v = &layouts[1]} }, /* floating */
-	{ MODKEY|ShiftMask,             XK_f,      setlayout,      {.v = &layouts[2]} }, /* monocle/fullscreen */
+	{ MODKEY|ShiftMask,             XK_f,      setlayout,      {.v = &layouts[2]} }, /* monocle */
+	{ MODKEY,                       XK_t,      setlayout,      {.v = &layouts[0]} }, /* tile */
 	{ MODKEY,                       XK_l,      spawn,          {.v = lockcmd } },
 	{ MODKEY,                       XK_space,  setlayout,      {0} },
+	{ MODKEY,                       XK_b,      togglebar,      {0} },
 	{ MODKEY,                       XK_j,      focusstack,     {.i = +1 } },
 	{ MODKEY,                       XK_k,      focusstack,     {.i = -1 } },
 	{ MODKEY,                       XK_h,      setmfact,       {.f = -0.05} },
 	{ MODKEY,                       XK_i,      setmfact,       {.f = +0.05} },
+	{ MODKEY,                       XK_d,      incnmaster,     {.i = -1 } },
+	{ MODKEY|ShiftMask,             XK_i,      incnmaster,     {.i = +1 } },
 	{ MODKEY,                       XK_Return, zoom,           {0} },
 	{ MODKEY,                       XK_Tab,    view,           {0} },
 	{ 0,                            XK_Print,  spawn,          {.v = screenshotcmd } },
