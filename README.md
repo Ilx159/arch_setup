@@ -22,6 +22,15 @@ chmod +x install.sh install_i3.sh
 - Cria `~/.config/i3/config` com keybinds (áudio, brilho, playerctl, xrandr, screenshots)
 - Cria `~/.xinitrc` (se não existir) com `exec i3`
 
+### Otimizações de Performance (para hardware antigo)
+- **TLP**: Gerenciamento inteligente de energia e performance
+- **ZRAM**: Compressão de memória para melhor uso da RAM
+- **Swap file**: Arquivo de swap otimizado de 2GB
+- **Serviços desabilitados**: Bluetooth, CUPS e ModemManager (reduz overhead)
+- **Kernel otimizado**: Parâmetros `mitigations=off` para hardware antigo
+- **i3 otimizado**: Configurações de performance (focus_follows_mouse no, bordas finas)
+- **Limpeza automática**: Hook do pacman para manter cache limpo
+
 ### Keybinds principais
 - Mod (Super) + q: abrir terminal (kitty)
 - Mod + e: abrir gerenciador de arquivos (nemo)
